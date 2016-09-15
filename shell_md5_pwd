@@ -1,0 +1,21 @@
+if [ ! -f /tmp/secret ]; then
+        read -s -p "Enter Password: " mypassword
+        echo $mypassword| md5sum | cut -d '-' -f 1 > /tmp/secret
+fi
+
+PASSWORD_FILE="/tmp/secret"
+MD5_HASH=$(cat /tmp/secret)
+PASSWORD_WRONG=1
+
+while [ $PASSWORD_WRONG -eq 1 ]
+ do
+    echo -e "\n Now validate: Enter your password:"
+    read -s ENTERED_PASSWORD
+    if [ "$MD5_HASH" != "$(echo $ENTERED_PASSWORD | md5sum | cut -d '-' -f 1)" ]; then
+        echo "Access Deniend: Incorrenct password!. Try again"
+    else
+        echo "Access Granted"
+        PASSWORD_WRONG=0
+    fi
+done
+
